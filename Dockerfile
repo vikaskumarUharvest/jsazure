@@ -1,22 +1,22 @@
-# Use a modern and lightweight Node.js image (LTS version)
+# Use lightweight Node.js 20 Alpine image (small size, faster builds)
 FROM node:20-alpine
 
-# Set working directory inside container
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy only package files first (for better caching) ie. paackage-lock.json and package.json
+# Copy package.json and package-lock.json first
+# This helps Docker cache dependencies if they haven't changed
 COPY package*.json ./
 
-# Install dependencies
-# npm ci is faster and more reliable for production/CI
-RUN npm ci
+# Install only production dependencies (smaller image, faster install)
+RUN npm ci --only=production
 
-# Copy the rest of the application code
+# Copy the rest of your application code
 COPY . .
 
-# Expose the port your app runs on
-# (make sure your app listens on this port)
-EXPOSE 80
+# Expose port 3000 (your app runs on this port)
+# This is mainly for documentation; actual port mapping happens at runtime
+EXPOSE 3000
 
-# Command to start the application
+# Command to start your Node.js application
 CMD ["node", "app.js"]

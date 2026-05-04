@@ -4,7 +4,7 @@ FROM node:20-alpine
 # Set working directory inside container
 WORKDIR /usr/src/app
 
-# Copy only package files first (for better caching)
+# Copy only package files first (for better caching) ie. paackage-lock.json and package.json
 COPY package*.json ./
 
 # Install dependencies

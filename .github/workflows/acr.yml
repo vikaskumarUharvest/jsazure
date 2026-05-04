@@ -24,4 +24,15 @@ jobs:
         with:
           context: .
           push: true
-          tags: jscontainer.azurecr.io/js-azure:latest
+          tags: jscontainer.azurecr.io/js-azure:${{ github.sha }}   # ← was :latest
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to App Service                                  # ← new step
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: js-express-app
+          images: jscontainer.azurecr.io/js-azure:${{ github.sha }}
